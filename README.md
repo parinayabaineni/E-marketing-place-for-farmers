@@ -1,1 +1,0 @@
-# E-marketing-place-for-farmers
