@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kisan Bazaar — Sell Straight From The Field</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --soil: #2B2420;
+    --soil-2: #382F28;
+    --cream: #F7F1E1;
+    --cream-dim: #EAE1CB;
+    --leaf: #4C7A3D;
+    --leaf-dark: #3A5E2E;
+    --marigold: #E8A23D;
+    --tomato: #C1442E;
+    --tomato-dark: #9E3623;
+    --line: rgba(43,36,32,0.14);
+    --shadow: 0 10px 30px rgba(43,36,32,0.16);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    background:var(--cream);
+    color:var(--soil);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;border:none;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+
+  /* ---------- furrow divider signature ---------- */
+  .furrow{
+    width:100%;
+    height:42px;
+    display:block;
+    line-height:0;
+  }
+  .furrow svg{width:100%;height:100%;display:block;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;top:0;z-index:40;
+    background:var(--soil);
+    border-bottom:1px solid rgba(247,241,225,0.08);
+  }
+  nav.wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    padding-top:16px;padding-bottom:16px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    color:var(--cream);
+    font-family:'Fraunces',serif;font-weight:700;font-size:22px;
+  }
+  .brand .mark{
+    width:34px;height:34px;border-radius:50%;
+    background:linear-gradient(160deg,var(--leaf),var(--leaf-dark));
+    display:flex;align-items:center;justify-content:center;
+    font-size:17px;
+  }
+  .nav-links{display:flex;align-items:center;gap:26px;}
+  .nav-links a{
+    color:var(--cream-dim);font-size:14.5px;font-weight:500;
+    transition:color .15s;
+  }
+  .nav-links a:hover{color:var(--marigold);}
+  .nav-actions{display:flex;align-items:center;gap:12px;}
+  .pill{
+    padding:9px 18px;border-radius:100px;font-size:14px;font-weight:600;
+    transition:transform .15s, background .15s;
+  }
+  .pill:hover{transform:translateY(-1px);}
+  .pill-ghost{
+    background:transparent;color:var(--cream);border:1px solid rgba(247,241,225,0.35);
+  }
+  .pill-ghost:hover{border-color:var(--marigold);color:var(--marigold);}
+  .pill-solid{background:var(--marigold);color:var(--soil);}
+  .pill-solid:hover{background:#f2b25b;}
+  .pill-tomato{background:var(--tomato);color:var(--cream);}
+  .pill-tomato:hover{background:var(--tomato-dark);}
+  .user-chip{
+    display:flex;align-items:center;gap:10px;color:var(--cream);
+    background:rgba(247,241,225,0.08);
+    padding:6px 14px 6px 6px;border-radius:100px;font-size:13.5px;
+  }
+  .user-chip .avatar{
+    width:26px;height:26px;border-radius:50%;
+    background:var(--marigold);color:var(--soil);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:12px;
+  }
+  .role-tag{
+    text-transform:uppercase;font-size:9.5px;letter-spacing:.08em;
+    background:var(--leaf);color:var(--cream);
+    padding:2px 7px;border-radius:5px;font-weight:700;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:
+      radial-gradient(ellipse at 80% -10%, rgba(232,162,61,0.18), transparent 55%),
+      var(--soil);
+    color:var(--cream);
+    padding:76px 0 0;
+    position:relative;
+  }
+  .hero-grid{
+    display:grid;grid-template-columns:1.05fr 0.95fr;gap:56px;align-items:center;
+    padding-bottom:64px;
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    color:var(--marigold);font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;
+    margin-bottom:22px;
+  }
+  .eyebrow::before{content:"";width:20px;height:1px;background:var(--marigold);}
+  .hero h1{
+    font-size:clamp(38px,4.6vw,58px);
+    line-height:1.04;
+    color:var(--cream);
+  }
+  .hero h1 em{
+    font-style:italic;color:var(--marigold);
+  }
+  .hero p.lead{
+    margin-top:22px;font-size:17.5px;line-height:1.65;
+    color:var(--cream-dim);max-width:480px;
+  }
+  .hero-cta{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap;}
+  .hero-cta .pill{padding:13px 26px;font-size:15px;}
+  .hero-stats{
+    display:flex;gap:34px;margin-top:52px;padding-top:28px;
+    border-top:1px solid rgba(247,241,225,0.14);
+  }
+  .hero-stats div b{
+    display:block;font-family:'Fraunces',serif;font-size:26px;color:var(--marigold);
+  }
+  .hero-stats div span{font-size:12.5px;color:var(--cream-dim);}
+
+  .hero-visual{
+    position:relative;border-radius:22px;overflow:hidden;
+    box-shadow:var(--shadow);
+    aspect-ratio:4/4.6;
+    background:var(--leaf-dark);
+  }
+  .hero-visual img{width:100%;height:100%;object-fit:cover;}
+  .float-card{
+    position:absolute;left:20px;bottom:20px;right:20px;
+    background:rgba(43,36,32,0.82);
+    backdrop-filter:blur(6px);
+    color:var(--cream);
+    border-radius:12px;padding:16px 18px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .float-card .fc-name{font-family:'Fraunces',serif;font-size:16px;}
+  .float-card .fc-sub{font-size:12px;color:var(--cream-dim);margin-top:2px;}
+  .float-card .fc-price{color:var(--marigold);font-family:'JetBrains Mono',monospace;font-weight:600;}
+
+  /* ---------- SECTIONS COMMON ---------- */
+  section{padding:70px 0;}
+  .sec-head{max-width:620px;margin-bottom:44px;}
+  .sec-head .eyebrow{color:var(--tomato);}
+  .sec-head h2{font-size:clamp(28px,3vw,38px);}
+  .sec-head p{margin-top:14px;font-size:16px;color:#5b4f45;line-height:1.6;}
+
+  /* how it works */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .step{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:28px 24px;position:relative;
+  }
+  .step .num{
+    font-family:'JetBrains Mono',monospace;color:var(--marigold);
+    font-size:13px;font-weight:600;
+  }
+  .step h3{font-size:19px;margin-top:14px;}
+  .step p{font-size:14.5px;color:#5b4f45;margin-top:10px;line-height:1.55;}
+
+  /* marketplace */
+  .market-bar{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:16px;flex-wrap:wrap;margin-bottom:28px;
+  }
+  .chip-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .chip{
+    padding:8px 15px;border-radius:100px;font-size:13.5px;font-weight:500;
+    background:#fff;border:1px solid var(--line);color:var(--soil);
+  }
+  .chip.active{background:var(--leaf);color:var(--cream);border-color:var(--leaf);}
+  .search-box{
+    display:flex;align-items:center;gap:8px;
+    background:#fff;border:1px solid var(--line);border-radius:100px;
+    padding:9px 16px;min-width:230px;
+  }
+  .search-box input{border:none;outline:none;font-family:inherit;font-size:14px;width:100%;background:transparent;}
+
+  .grid-products{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;
+  }
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    overflow:hidden;transition:transform .18s, box-shadow .18s;
+    display:flex;flex-direction:column;
+  }
+  .card:hover{transform:translateY(-4px);box-shadow:var(--shadow);}
+  .card .thumb{
+    height:170px;overflow:hidden;position:relative;background:var(--cream-dim);
+  }
+  .card .thumb img{width:100%;height:100%;object-fit:cover;}
+  .card .badge{
+    position:absolute;top:10px;left:10px;
+    background:var(--soil);color:var(--marigold);
+    font-family:'JetBrains Mono',monospace;font-size:11px;
+    padding:3px 9px;border-radius:100px;
+  }
+  .card .body{padding:16px 16px 18px;flex:1;display:flex;flex-direction:column;}
+  .card h4{font-family:'Fraunces',serif;font-size:18px;}
+  .card .farmer{font-size:12.5px;color:#7a6d5f;margin-top:4px;}
+  .card .row{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-top:14px;
+  }
+  .price{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--leaf-dark);font-size:16px;}
+  .price small{font-weight:400;color:#7a6d5f;font-size:12px;}
+  .buy-btn{
+    background:var(--tomato);color:#fff;padding:9px 16px;border-radius:9px;
+    font-size:13.5px;font-weight:600;transition:background .15s;
+  }
+  .buy-btn:hover{background:var(--tomato-dark);}
+  .buy-btn:disabled{background:#c9c0b0;cursor:not-allowed;}
+
+  /* dashboards */
+  .dash{display:none;}
+  .dash.active{display:block;}
+  .dash-grid{display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:start;}
+  .panel{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:24px;
+  }
+  .panel h3{font-size:18px;margin-bottom:4px;}
+  .panel .hint{font-size:13px;color:#7a6d5f;margin-bottom:18px;}
+  .field{margin-bottom:14px;}
+  .field label{
+    display:block;font-size:12.5px;font-weight:600;margin-bottom:6px;color:#5b4f45;
+  }
+  .field input,.field select,.field textarea{
+    width:100%;padding:10px 12px;border-radius:9px;border:1px solid var(--line);
+    font-family:inherit;font-size:14px;background:var(--cream);
+    outline:none;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--leaf);}
+  .field textarea{resize:vertical;min-height:70px;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .btn-block{
+    width:100%;padding:12px;border-radius:9px;background:var(--leaf);color:#fff;
+    font-weight:600;font-size:14.5px;margin-top:4px;transition:background .15s;
+  }
+  .btn-block:hover{background:var(--leaf-dark);}
+
+  .my-listing{
+    display:flex;gap:14px;align-items:center;
+    padding:14px;border:1px solid var(--line);border-radius:12px;margin-bottom:12px;
+  }
+  .my-listing img{width:58px;height:58px;border-radius:9px;object-fit:cover;flex-shrink:0;}
+  .my-listing .info{flex:1;}
+  .my-listing .info h5{font-family:'Fraunces',serif;font-size:15px;}
+  .my-listing .info span{font-size:12.5px;color:#7a6d5f;}
+  .icon-btn{
+    width:32px;height:32px;border-radius:8px;background:var(--cream);
+    display:flex;align-items:center;justify-content:center;font-size:14px;
+    border:1px solid var(--line);
+  }
+  .icon-btn:hover{background:var(--tomato);color:#fff;border-color:var(--tomato);}
+  .empty{
+    text-align:center;padding:36px 20px;color:#7a6d5f;font-size:14px;
+  }
+
+  /* cart */
+  .cart-row{
+    display:flex;gap:14px;align-items:center;
+    padding:14px 0;border-bottom:1px solid var(--line);
+  }
+  .cart-row img{width:54px;height:54px;border-radius:9px;object-fit:cover;}
+  .cart-row .info{flex:1;}
+  .cart-row .info h5{font-family:'Fraunces',serif;font-size:15px;}
+  .qty-ctrl{display:flex;align-items:center;gap:8px;}
+  .qty-ctrl button{
+    width:26px;height:26px;border-radius:7px;background:var(--cream);border:1px solid var(--line);
+  }
+  .cart-total{
+    display:flex;justify-content:space-between;align-items:center;
+    padding-top:16px;margin-top:8px;font-family:'Fraunces',serif;font-size:19px;
+  }
+
+  /* footer */
+  footer{
+    background:var(--soil);color:var(--cream-dim);padding:52px 0 28px;
+  }
+  .foot-grid{
+    display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px;
+    padding-bottom:34px;border-bottom:1px solid rgba(247,241,225,0.1);
+  }
+  .foot-grid h5{color:var(--cream);font-family:'Fraunces',serif;font-size:15px;margin-bottom:14px;}
+  .foot-grid a{display:block;font-size:13.5px;color:var(--cream-dim);margin-bottom:9px;}
+  .foot-grid a:hover{color:var(--marigold);}
+  .foot-bottom{
+    display:flex;justify-content:space-between;padding-top:22px;font-size:12.5px;color:#8a7d6e;
+    flex-wrap:wrap;gap:10px;
+  }
+
+  /* modal */
+  .overlay{
+    position:fixed;inset:0;background:rgba(43,36,32,0.55);
+    display:none;align-items:center;justify-content:center;z-index:100;padding:20px;
+  }
+  .overlay.active{display:flex;}
+  .modal{
+    background:var(--cream);border-radius:18px;max-width:400px;width:100%;
+    padding:32px 30px;position:relative;box-shadow:0 30px 60px rgba(0,0,0,0.35);
+  }
+  .modal .close{
+    position:absolute;top:16px;right:18px;font-size:20px;color:#7a6d5f;background:none;
+  }
+  .modal h3{font-size:23px;margin-bottom:6px;}
+  .modal .sub{font-size:13.5px;color:#7a6d5f;margin-bottom:22px;}
+  .role-switch{display:flex;background:#fff;border:1px solid var(--line);border-radius:100px;padding:4px;margin-bottom:20px;}
+  .role-switch button{
+    flex:1;padding:8px;border-radius:100px;font-size:13.5px;font-weight:600;background:transparent;color:var(--soil);
+  }
+  .role-switch button.active{background:var(--leaf);color:#fff;}
+  .modal-foot{font-size:13px;color:#7a6d5f;margin-top:16px;text-align:center;}
+  .modal-foot a{color:var(--tomato);font-weight:600;}
+  .error-msg{
+    background:#fdecea;color:var(--tomato-dark);font-size:13px;padding:10px 12px;
+    border-radius:8px;margin-bottom:14px;display:none;
+  }
+  .toast-wrap{
+    position:fixed;bottom:24px;right:24px;z-index:200;display:flex;flex-direction:column;gap:10px;
+  }
+  .toast{
+    background:var(--soil);color:var(--cream);padding:13px 20px;border-radius:10px;
+    font-size:13.5px;box-shadow:var(--shadow);display:flex;align-items:center;gap:10px;
+    animation:slideIn .25s ease;
+  }
+  .toast .dot{width:8px;height:8px;border-radius:50%;background:var(--marigold);}
+  @keyframes slideIn{from{transform:translateY(12px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+
+  @media(max-width:860px){
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-visual{aspect-ratio:16/10;}
+    .steps{grid-template-columns:1fr;}
+    .dash-grid{grid-template-columns:1fr;}
+    .foot-grid{grid-template-columns:1fr 1fr;}
+    .nav-links{display:none;}
+  }
+  :focus-visible{outline:2px solid var(--marigold);outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header>
+  <nav class="wrap">
+    <a href="#top" class="brand"><span class="mark">🌾</span> Kisan Bazaar</a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#market">Marketplace</a>
+      <a href="#farmer-dash" id="navFarmerLink" style="display:none;">Sell</a>
+      <a href="#cart-panel" id="navCartLink" style="display:none;">Cart <span id="cartCount" class="mono"></span></a>
+    </div>
+    <div class="nav-actions" id="navAuthArea">
+      <button class="pill pill-ghost" onclick="openAuth('login')">Log in</button>
+      <button class="pill pill-solid" onclick="openAuth('signup')">Join free</button>
+    </div>
+  </nav>
+</header>
+
+<div class="furrow"><svg viewBox="0 0 1200 42" preserveAspectRatio="none"><path d="M0 21 Q 25 5 50 21 T 100 21 T 150 21 T 200 21 T 250 21 T 300 21 T 350 21 T 400 21 T 450 21 T 500 21 T 550 21 T 600 21 T 650 21 T 700 21 T 750 21 T 800 21 T 850 21 T 900 21 T 950 21 T 1000 21 T 1050 21 T 1100 21 T 1150 21 T 1200 21" fill="none" stroke="#2B2420" stroke-width="42"/></svg></div>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top" style="padding-top:0;">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Farm to doorstep, no middlemen</div>
+        <h1>Sell your harvest. <em>Buy it fresh.</em><br>Straight from the field.</h1>
+        <p class="lead">Kisan Bazaar connects farmers directly with customers. List what you've grown in minutes, or fill your basket with produce picked this week — no commission agents in between.</p>
+        <div class="hero-cta">
+          <button class="pill pill-solid" onclick="openAuth('signup-farmer')">🌱 Start selling as a farmer</button>
+          <button class="pill pill-ghost" onclick="document.getElementById('market').scrollIntoView()">Browse the market →</button>
+        </div>
+        <div class="hero-stats">
+          <div><b id="statFarmers">0</b><span>Farmers listed</span></div>
+          <div><b id="statProducts">0</b><span>Products live</span></div>
+          <div><b>0%</b><span>Commission taken</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?q=80&w=800&auto=format&fit=crop" alt="Farmer harvesting fresh vegetables in a field">
+        <div class="float-card">
+          <div>
+            <div class="fc-name">Ramesh's Farm</div>
+            <div class="fc-sub">Vijayawada · Tomatoes, harvested today</div>
+          </div>
+          <div class="fc-price">₹28<small>/kg</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="furrow" style="transform:rotate(180deg);"><svg viewBox="0 0 1200 42" preserveAspectRatio="none"><path d="M0 21 Q 25 5 50 21 T 100 21 T 150 21 T 200 21 T 250 21 T 300 21 T 350 21 T 400 21 T 450 21 T 500 21 T 550 21 T 600 21 T 650 21 T 700 21 T 750 21 T 800 21 T 850 21 T 900 21 T 950 21 T 1000 21 T 1050 21 T 1100 21 T 1150 21 T 1200 21" fill="none" stroke="#2B2420" stroke-width="42"/></svg></div>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Three steps</div>
+      <h2>How the field reaches the kitchen</h2>
+      <p>No paperwork, no agents, no waiting for market day. Just two accounts talking to each other.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="num mono">01 — Farmer</div>
+        <h3>List your produce</h3>
+        <p>Create a free farmer account, add a photo, set your price per kg or unit, and your stock goes live on the marketplace instantly.</p>
+      </div>
+      <div class="step">
+        <div class="num mono">02 — Customer</div>
+        <h3>Browse & choose</h3>
+        <p>Customers search by crop or farm, see who grew it and where, and add fresh produce straight to their basket.</p>
+      </div>
+      <div class="step">
+        <div class="num mono">03 — Deal made</div>
+        <h3>Order confirmed</h3>
+        <p>The order is placed directly with the farmer. Stock updates automatically — no commission, no third party.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MARKETPLACE ============ -->
+<section id="market" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:28px;">
+      <div class="eyebrow">Live marketplace</div>
+      <h2>Picked this week</h2>
+    </div>
+    <div class="market-bar">
+      <div class="chip-row" id="categoryChips"></div>
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" id="searchInput" placeholder="Search vegetables, fruits, grains…" oninput="renderProducts()">
+      </div>
+    </div>
+    <div class="grid-products" id="productGrid"></div>
+  </div>
+</section>
+
+<!-- ============ FARMER DASHBOARD ============ -->
+<section id="farmer-dash" class="dash">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Your farm</div>
+      <h2>Manage your listings</h2>
+      <p>Add fresh stock, update prices, and see what's currently live to customers.</p>
+    </div>
+    <div class="dash-grid">
+      <div class="panel">
+        <h3>List a new product</h3>
+        <div class="hint">Takes about a minute.</div>
+        <form id="productForm" onsubmit="handleAddProduct(event)">
+          <div class="field">
+            <label>Product name</label>
+            <input type="text" id="p-name" placeholder="e.g. Organic Tomatoes" required>
+          </div>
+          <div class="two-col">
+            <div class="field">
+              <label>Category</label>
+              <select id="p-category">
+                <option>Vegetables</option>
+                <option>Fruits</option>
+                <option>Grains</option>
+                <option>Dairy</option>
+                <option>Spices</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Unit</label>
+              <select id="p-unit">
+                <option>kg</option>
+                <option>dozen</option>
+                <option>litre</option>
+                <option>quintal</option>
+              </select>
+            </div>
+          </div>
+          <div class="two-col">
+            <div class="field">
+              <label>Price (₹)</label>
+              <input type="number" id="p-price" min="1" step="0.5" placeholder="30" required>
+            </div>
+            <div class="field">
+              <label>Quantity available</label>
+              <input type="number" id="p-qty" min="1" placeholder="100" required>
+            </div>
+          </div>
+          <div class="field">
+            <label>Image URL (optional)</label>
+            <input type="text" id="p-image" placeholder="Paste a photo link">
+          </div>
+          <div class="field">
+            <label>Description</label>
+            <textarea id="p-desc" placeholder="Harvested today, grown without pesticides…"></textarea>
+          </div>
+          <button type="submit" class="btn-block">+ Add to marketplace</button>
+        </form>
+      </div>
+      <div class="panel">
+        <h3>Your live listings</h3>
+        <div class="hint">Everything you've listed appears here — and in the public marketplace.</div>
+        <div id="myListings"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CART / CUSTOMER PANEL ============ -->
+<section id="cart-panel" class="dash" style="background:#fff;border-top:1px solid var(--line);">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Your basket</div>
+      <h2>Ready to check out?</h2>
+    </div>
+    <div class="dash-grid">
+      <div class="panel">
+        <h3>Basket</h3>
+        <div id="cartItems"></div>
+        <div class="cart-total"><span>Total</span><span class="mono" id="cartTotal">₹0</span></div>
+        <button class="btn-block" style="background:var(--tomato);" onclick="checkout()">Place order</button>
+      </div>
+      <div class="panel">
+        <h3>Order history</h3>
+        <div class="hint">Orders you've placed on Kisan Bazaar.</div>
+        <div id="orderHistory"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a href="#top" class="brand" style="color:var(--cream);margin-bottom:12px;"><span class="mark">🌾</span> Kisan Bazaar</a>
+        <p style="font-size:13.5px;color:#a89a89;line-height:1.6;margin-top:14px;max-width:260px;">A direct line between the field and the kitchen table. Built for farmers, priced fairly for everyone.</p>
+      </div>
+      <div>
+        <h5>Marketplace</h5>
+        <a href="#market">Browse produce</a>
+        <a href="#how">How it works</a>
+        <a href="#" onclick="openAuth('signup-farmer');return false;">Become a seller</a>
+      </div>
+      <div>
+        <h5>Account</h5>
+        <a href="#" onclick="openAuth('login');return false;">Log in</a>
+        <a href="#" onclick="openAuth('signup');return false;">Create account</a>
+      </div>
+      <div>
+        <h5>Support</h5>
+        <a href="#">Help center</a>
+        <a href="#">Contact us</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Kisan Bazaar. Demo project — data resets on page reload.</span>
+      <span>Made for farmers, by design.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ AUTH MODAL ============ -->
+<div class="overlay" id="authOverlay">
+  <div class="modal">
+    <button class="close" onclick="closeAuth()">✕</button>
+    <div class="role-switch" id="authTabs">
+      <button id="tabLogin" onclick="setAuthTab('login')">Log in</button>
+      <button id="tabSignup" onclick="setAuthTab('signup')">Sign up</button>
+    </div>
+    <div id="loginPane">
+      <h3>Welcome back</h3>
+      <div class="sub">Log in to your Kisan Bazaar account.</div>
+      <div class="error-msg" id="loginError"></div>
+      <form onsubmit="handleLogin(event)">
+        <div class="field"><label>Email</label><input type="email" id="login-email" required></div>
+        <div class="field"><label>Password</label><input type="password" id="login-password" required></div>
+        <button type="submit" class="btn-block">Log in</button>
+      </form>
+      <div class="modal-foot">New here? <a onclick="setAuthTab('signup')">Create an account</a></div>
+    </div>
+    <div id="signupPane" style="display:none;">
+      <h3>Create your account</h3>
+      <div class="sub">Choose how you'll use Kisan Bazaar.</div>
+      <div class="role-switch" id="roleSwitch" style="margin-bottom:16px;">
+        <button id="roleFarmer" onclick="setSignupRole('farmer')">🌱 I'm a farmer</button>
+        <button id="roleCustomer" onclick="setSignupRole('customer')">🧺 I'm a customer</button>
+      </div>
+      <div class="error-msg" id="signupError"></div>
+      <form onsubmit="handleSignup(event)">
+        <div class="field"><label>Full name</label><input type="text" id="signup-name" required></div>
+        <div class="field"><label id="farmNameLabel" style="display:none;">Farm name</label><input type="text" id="signup-farmname" placeholder="e.g. Ramesh's Farm" style="display:none;"></div>
+        <div class="field"><label>Email</label><input type="email" id="signup-email" required></div>
+        <div class="field"><label>Password</label><input type="password" id="signup-password" required minlength="4"></div>
+        <button type="submit" class="btn-block">Create account</button>
+      </form>
+      <div class="modal-foot">Already registered? <a onclick="setAuthTab('login')">Log in</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+/* ============================================================
+   IN-MEMORY DATA STORE (resets on page reload — this is a demo/
+   prototype. To make it permanent, wire these arrays up to a
+   real backend + database.)
+   ============================================================ */
+let users = [
+  {id:1, role:'farmer', name:'Ramesh Kumar', farmName:"Ramesh's Farm", email:'ramesh@farm.com', password:'demo123', location:'Vijayawada'},
+  {id:2, role:'farmer', name:'Lakshmi Devi', farmName:"Lakshmi Organics", email:'lakshmi@farm.com', password:'demo123', location:'Guntur'},
+  {id:3, role:'customer', name:'Aditya Rao', email:'aditya@mail.com', password:'demo123'}
+];
+let products = [
+  {id:1, farmerId:1, name:'Vine-Ripened Tomatoes', category:'Vegetables', price:28, unit:'kg', qty:120, image:'https://images.unsplash.com/photo-1546470427-e26264be0b0d?q=80&w=500&auto=format&fit=crop', desc:'Harvested this morning, no pesticides used.'},
+  {id:2, farmerId:1, name:'Farm Fresh Spinach', category:'Vegetables', price:18, unit:'kg', qty:60, image:'https://images.unsplash.com/photo-1576045057995-568f588f82fb?q=80&w=500&auto=format&fit=crop', desc:'Deep green, tender leaves picked at dawn.'},
+  {id:3, farmerId:2, name:'Alphonso Mangoes', category:'Fruits', price:120, unit:'dozen', qty:40, image:'https://images.unsplash.com/photo-1591073113125-e46713c829ed?q=80&w=500&auto=format&fit=crop', desc:'The king of mangoes, tree-ripened.'},
+  {id:4, farmerId:2, name:'Organic Basmati Rice', category:'Grains', price:85, unit:'kg', qty:300, image:'https://images.unsplash.com/photo-1586201375761-83865001e31c?q=80&w=500&auto=format&fit=crop', desc:'Aged for aroma, grown without chemical fertilizer.'},
+  {id:5, farmerId:1, name:'Farm Butter & Ghee', category:'Dairy', price:450, unit:'kg', qty:25, image:'https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?q=80&w=500&auto=format&fit=crop', desc:'Slow-churned from grass-fed cow milk.'},
+  {id:6, farmerId:2, name:'Turmeric Root Powder', category:'Spices', price:210, unit:'kg', qty:50, image:'https://images.unsplash.com/photo-1615485500704-8e990f9900f7?q=80&w=500&auto=format&fit=crop', desc:'Sun-dried and stone-ground, deep golden colour.'},
+  {id:7, farmerId:2, name:'Sweet Corn', category:'Vegetables', price:35, unit:'kg', qty:80, image:'https://images.unsplash.com/photo-1601593768799-76b6d8d38ede?q=80&w=500&auto=format&fit=crop', desc:'Sweet, juicy, picked young.'},
+  {id:8, farmerId:1, name:'Pomegranates', category:'Fruits', price:95, unit:'kg', qty:70, image:'https://images.unsplash.com/photo-1541344999736-83eca272f6fc?q=80&w=500&auto=format&fit=crop', desc:'Deep red arils, hand-picked for sweetness.'}
+];
+let nextUserId = 4;
+let nextProductId = 9;
+let currentUser = null;
+let cart = []; // {productId, qty}
+let orders = []; // {id, items:[{productId,qty,price}], total, date}
+let activeCategory = 'All';
+let signupRole = 'customer';
+
+const CATS = ['All','Vegetables','Fruits','Grains','Dairy','Spices'];
+
+/* ---------- helpers ---------- */
+function findUser(email){ return users.find(u => u.email.toLowerCase() === email.toLowerCase()); }
+function findFarmer(id){ return users.find(u => u.id === id); }
+function currency(n){ return '₹' + Number(n).toLocaleString('en-IN'); }
+function initials(name){ return name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
+
+function toast(msg){
+  const wrap = document.getElementById('toastWrap');
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = `<span class="dot"></span>${msg}`;
+  wrap.appendChild(el);
+  setTimeout(()=>{ el.remove(); }, 3200);
+}
+
+/* ---------- category chips ---------- */
+function renderChips(){
+  const el = document.getElementById('categoryChips');
+  el.innerHTML = CATS.map(c => `<button class="chip ${c===activeCategory?'active':''}" onclick="setCategory('${c}')">${c}</button>`).join('');
+}
+function setCategory(c){ activeCategory = c; renderChips(); renderProducts(); }
+
+/* ---------- product grid ---------- */
+function renderProducts(){
+  const grid = document.getElementById('productGrid');
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  let list = products.filter(p => p.qty > 0);
+  if(activeCategory !== 'All') list = list.filter(p => p.category === activeCategory);
+  if(q) list = list.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
+
+  if(list.length === 0){
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1;">No produce matches that search right now. Try a different word or category.</div>`;
+  } else {
+    grid.innerHTML = list.map(p => {
+      const farmer = findFarmer(p.farmerId);
+      const isOwnFarmerProduct = currentUser && currentUser.role === 'farmer' && currentUser.id === p.farmerId;
+      return `
+      <div class="card">
+        <div class="thumb">
+          <img src="${p.image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=500&auto=format&fit=crop'}" alt="${p.name}">
+          <span class="badge">${p.category}</span>
+        </div>
+        <div class="body">
+          <h4>${p.name}</h4>
+          <div class="farmer">🌱 ${farmer ? (farmer.farmName || farmer.name) : 'Unknown farm'} · ${p.qty} ${p.unit} left</div>
+          <div class="row">
+            <div class="price">${currency(p.price)} <small>/${p.unit}</small></div>
+            <button class="buy-btn" ${isOwnFarmerProduct ? 'disabled' : ''} onclick="addToCart(${p.id})">
+              ${isOwnFarmerProduct ? 'Your listing' : '+ Add to cart'}
+            </button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('statFarmers').textContent = new Set(products.map(p=>p.farmerId)).size;
+  document.getElementById('statProducts').textContent = products.filter(p=>p.qty>0).length;
+}
+
+/* ---------- cart ---------- */
+function addToCart(productId){
+  if(!currentUser){ toast('Log in as a customer to buy produce.'); openAuth('login'); return; }
+  if(currentUser.role !== 'customer'){ toast('Switch to a customer account to buy.'); return; }
+  const product = products.find(p => p.id === productId);
+  const existing = cart.find(c => c.productId === productId);
+  const inCartQty = existing ? existing.qty : 0;
+  if(inCartQty + 1 > product.qty){ toast('No more stock available for that item.'); return; }
+  if(existing) existing.qty += 1;
+  else cart.push({productId, qty:1});
+  toast(`Added ${product.name} to your basket.`);
+  renderCartCount();
+  renderCart();
+}
+function changeQty(productId, delta){
+  const item = cart.find(c => c.productId === productId);
+  if(!item) return;
+  const product = products.find(p => p.id === productId);
+  item.qty += delta;
+  if(item.qty <= 0){ cart = cart.filter(c => c.productId !== productId); }
+  else if(item.qty > product.qty){ item.qty = product.qty; toast('That\'s all the stock available.'); }
+  renderCartCount();
+  renderCart();
+}
+function renderCartCount(){
+  const count = cart.reduce((s,c)=>s+c.qty,0);
+  document.getElementById('cartCount').textContent = count > 0 ? `(${count})` : '';
+}
+function renderCart(){
+  const el = document.getElementById('cartItems');
+  if(cart.length === 0){
+    el.innerHTML = `<div class="empty">Your basket is empty. Head to the marketplace and add something fresh.</div>`;
+    document.getElementById('cartTotal').textContent = currency(0);
+    return;
+  }
+  let total = 0;
+  el.innerHTML = cart.map(c => {
+    const p = products.find(pr => pr.id === c.productId);
+    const lineTotal = p.price * c.qty;
+    total += lineTotal;
+    return `
+    <div class="cart-row">
+      <img src="${p.image}" alt="${p.name}">
+      <div class="info">
+        <h5>${p.name}</h5>
+        <span class="mono">${currency(p.price)}/${p.unit}</span>
+      </div>
+      <div class="qty-ctrl">
+        <button onclick="changeQty(${p.id},-1)">−</button>
+        <span class="mono">${c.qty}</span>
+        <button onclick="changeQty(${p.id},1)">+</button>
+      </div>
+      <div class="price mono" style="min-width:70px;text-align:right;">${currency(lineTotal)}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('cartTotal').textContent = currency(total);
+}
+function checkout(){
+  if(cart.length === 0){ toast('Add something to your basket first.'); return; }
+  let total = 0;
+  const items = cart.map(c => {
+    const p = products.find(pr => pr.id === c.productId);
+    total += p.price * c.qty;
+    p.qty -= c.qty; // reduce stock
+    return {name:p.name, qty:c.qty, unit:p.unit, price:p.price};
+  });
+  orders.unshift({id: orders.length+1, items, total, date: new Date().toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'})});
+  cart = [];
+  renderCartCount();
+  renderCart();
+  renderOrders();
+  renderProducts();
+  toast('Order placed! The farmer has been notified.');
+}
+function renderOrders(){
+  const el = document.getElementById('orderHistory');
+  if(orders.length === 0){
+    el.innerHTML = `<div class="empty">No orders yet. Your placed orders will show up here.</div>`;
+    return;
+  }
+  el.innerHTML = orders.map(o => `
+    <div class="my-listing" style="align-items:flex-start;">
+      <div class="info">
+        <h5>Order #${o.id} · ${o.date}</h5>
+        <span>${o.items.map(i=>`${i.qty} ${i.unit} ${i.name}`).join(', ')}</span>
+      </div>
+      <div class="price mono">${currency(o.total)}</div>
+    </div>
+  `).join('');
+}
+
+/* ---------- farmer dashboard ---------- */
+function handleAddProduct(e){
+  e.preventDefault();
+  const product = {
+    id: nextProductId++,
+    farmerId: currentUser.id,
+    name: document.getElementById('p-name').value.trim(),
+    category: document.getElementById('p-category').value,
+    unit: document.getElementById('p-unit').value,
+    price: parseFloat(document.getElementById('p-price').value),
+    qty: parseInt(document.getElementById('p-qty').value),
+    image: document.getElementById('p-image').value.trim(),
+    desc: document.getElementById('p-desc').value.trim()
+  };
+  products.unshift(product);
+  document.getElementById('productForm').reset();
+  renderMyListings();
+  renderProducts();
+  toast(`${product.name} is now live on the marketplace.`);
+}
+function deleteProduct(id){
+  products = products.filter(p => p.id !== id);
+  renderMyListings();
+  renderProducts();
+  toast('Listing removed.');
+}
+function renderMyListings(){
+  const el = document.getElementById('myListings');
+  if(!currentUser || currentUser.role !== 'farmer') return;
+  const mine = products.filter(p => p.farmerId === currentUser.id);
+  if(mine.length === 0){
+    el.innerHTML = `<div class="empty">You haven't listed anything yet — use the form to add your first product.</div>`;
+    return;
+  }
+  el.innerHTML = mine.map(p => `
+    <div class="my-listing">
+      <img src="${p.image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=200&auto=format&fit=crop'}" alt="${p.name}">
+      <div class="info">
+        <h5>${p.name}</h5>
+        <span>${currency(p.price)}/${p.unit} · ${p.qty} ${p.unit} in stock</span>
+      </div>
+      <button class="icon-btn" onclick="deleteProduct(${p.id})" title="Remove listing">🗑</button>
+    </div>
+  `).join('');
+}
+
+/* ---------- auth modal ---------- */
+function openAuth(mode){
+  document.getElementById('authOverlay').classList.add('active');
+  document.getElementById('loginError').style.display='none';
+  document.getElementById('signupError').style.display='none';
+  if(mode === 'login') setAuthTab('login');
+  else if(mode === 'signup-farmer'){ setAuthTab('signup'); setSignupRole('farmer'); }
+  else { setAuthTab('signup'); setSignupRole('customer'); }
+}
+function closeAuth(){ document.getElementById('authOverlay').classList.remove('active'); }
+function setAuthTab(tab){
+  document.getElementById('tabLogin').classList.toggle('active', tab==='login');
+  document.getElementById('tabSignup').classList.toggle('active', tab==='signup');
+  document.getElementById('loginPane').style.display = tab==='login' ? 'block' : 'none';
+  document.getElementById('signupPane').style.display = tab==='signup' ? 'block' : 'none';
+}
+function setSignupRole(role){
+  signupRole = role;
+  document.getElementById('roleFarmer').classList.toggle('active', role==='farmer');
+  document.getElementById('roleCustomer').classList.toggle('active', role==='customer');
+  document.getElementById('farmNameLabel').style.display = role==='farmer' ? 'block' : 'none';
+  document.getElementById('signup-farmname').style.display = role==='farmer' ? 'block' : 'none';
+}
+
+function handleLogin(e){
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const user = findUser(email);
+  const errEl = document.getElementById('loginError');
+  if(!user || user.password !== password){
+    errEl.textContent = 'Email or password is incorrect. Try again, or sign up below.';
+    errEl.style.display = 'block';
+    return;
+  }
+  currentUser = user;
+  closeAuth();
+  applyAuthState();
+  toast(`Welcome back, ${user.name.split(' ')[0]}!`);
+}
+function handleSignup(e){
+  e.preventDefault();
+  const name = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const password = document.getElementById('signup-password').value;
+  const farmName = document.getElementById('signup-farmname').value.trim();
+  const errEl = document.getElementById('signupError');
+  if(findUser(email)){
+    errEl.textContent = 'An account with that email already exists. Try logging in instead.';
+    errEl.style.display = 'block';
+    return;
+  }
+  const user = { id: nextUserId++, role: signupRole, name, email, password };
+  if(signupRole === 'farmer') user.farmName = farmName || `${name}'s Farm`;
+  users.push(user);
+  currentUser = user;
+  closeAuth();
+  applyAuthState();
+  toast(`Account created — welcome, ${name.split(' ')[0]}!`);
+}
+function logout(){
+  currentUser = null;
+  applyAuthState();
+  toast('Logged out.');
+  document.getElementById('top').scrollIntoView();
+}
+
+/* ---------- reflect auth state across UI ---------- */
+function applyAuthState(){
+  const navArea = document.getElementById('navAuthArea');
+  const farmerDash = document.getElementById('farmer-dash');
+  const cartPanel = document.getElementById('cart-panel');
+  const navFarmerLink = document.getElementById('navFarmerLink');
+  const navCartLink = document.getElementById('navCartLink');
+
+  if(currentUser){
+    navArea.innerHTML = `
+      <div class="user-chip">
+        <span class="avatar">${initials(currentUser.name)}</span>
+        ${currentUser.name.split(' ')[0]}
+        <span class="role-tag">${currentUser.role}</span>
+      </div>
+      <button class="pill pill-tomato" onclick="logout()">Log out</button>
+    `;
+    if(currentUser.role === 'farmer'){
+      farmerDash.classList.add('active');
+      cartPanel.classList.remove('active');
+      navFarmerLink.style.display = 'inline';
+      navCartLink.style.display = 'none';
+      renderMyListings();
+    } else {
+      cartPanel.classList.add('active');
+      farmerDash.classList.remove('active');
+      navCartLink.style.display = 'inline';
+      navFarmerLink.style.display = 'none';
+      renderCart();
+      renderOrders();
+    }
+  } else {
+    navArea.innerHTML = `
+      <button class="pill pill-ghost" onclick="openAuth('login')">Log in</button>
+      <button class="pill pill-solid" onclick="openAuth('signup')">Join free</button>
+    `;
+    farmerDash.classList.remove('active');
+    cartPanel.classList.remove('active');
+    navFarmerLink.style.display = 'none';
+    navCartLink.style.display = 'none';
+  }
+  renderCartCount();
+  renderProducts();
+}
+
+/* ---------- init ---------- */
+renderChips();
+renderProducts();
+applyAuthState();
+document.getElementById('authOverlay').addEventListener('click', (e)=>{
+  if(e.target.id === 'authOverlay') closeAuth();
+});
+</script>
+</body>
+</html>
